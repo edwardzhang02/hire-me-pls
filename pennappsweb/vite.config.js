@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "https://pennappsdreamteam.github.io/hire-me-pls/",
+  base: "https://hilarious-alpaca-a0636d.netlify.app",
   plugins: [react()],
   server: {
     proxy: {

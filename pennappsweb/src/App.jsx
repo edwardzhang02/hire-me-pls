@@ -27,10 +27,10 @@ function App() {
       .then((data) => {
         console.log(data);
         setLoading(false);
-        fetch("exampleUrl/generate", {
-          method: "POST",
-          body: data,
-        });
+        // fetch("exampleUrl/generate", {
+        //   method: "POST",
+        //   body: data,
+        // });
       });
   };
 
