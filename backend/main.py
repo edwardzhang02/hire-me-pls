@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from metaphor_python import Metaphor
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 openai.api_key = os.environ.get("OPEN_AI_API_KEY")
@@ -16,6 +17,18 @@ class Context(BaseModel):
 
 app = FastAPI()
 client = Metaphor(api_key=os.environ.get("METAPHOR_API_KEY"))
+
+origins = [
+    "http://localhost:5173",  # origin of frontend application
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,  # Allow credentials (e.g., cookies) in the request
+    allow_methods=["*"],  # Allow all HTTP methods, or specify specific methods
+    allow_headers=["*"],  # Allow all headers, or specify specific headers
+)
 
 
 def get_company_information(company_name):
@@ -72,6 +85,7 @@ async def root():
 
 @app.post("/generate/")
 async def root(context: Context):
+    print(context.user_context)
     company_info = get_company_information(context.company_name)
     print(company_info)
     clean_info = clean_company_information(company_info, context.company_name)
