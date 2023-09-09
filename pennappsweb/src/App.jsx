@@ -7,31 +7,25 @@ function App() {
   const [company, setCompany] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const url = "/api/linkedin-email-finder";
-  const apiKey = import.meta.env.VITE_PROSPEO_API;
+  const backendURL =
+    import.meta.env.VITE_ENV === "dev" ? "http://localhost:8000" : "TODO";
 
-  const requiredHeaders = {
-    "Content-Type": "application/json",
-    "X-KEY": apiKey,
-  };
-
-  const submitLinkedin = (e) => {
+  const submitFunc = async (e) => {
     e.preventDefault();
     setLoading(true);
-    fetch(url, {
+    const coverLetterRes = await fetch(`${backendURL}/generate`, {
       method: "POST",
-      headers: requiredHeaders,
-      body: JSON.stringify({ url: linkedin }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setLoading(false);
-        // fetch("exampleUrl/generate", {
-        //   method: "POST",
-        //   body: data,
-        // });
-      });
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        company_name: company,
+        linkedin_profile_url: linkedin,
+      }),
+    });
+    const coverLetterData = await coverLetterRes.json();
+    setLoading(false);
+    console.log(coverLetterData);
   };
 
   return (
@@ -39,14 +33,15 @@ function App() {
       {loading ? (
         <Spinner className="mx-auto my-auto" />
       ) : (
-        <form onSubmit={(e) => submitLinkedin(e)}>
+        <form onSubmit={(e) => submitFunc(e)}>
           <div className="space-y-12">
             <div className="border-b border-gray-900/10 pb-12">
               <h2 className="text-base font-semibold leading-7 text-gray-900">
-                LinkedIn Information
+                Generate a custom cover letter in seconds!
               </h2>
               <p className="mt-1 text-sm leading-6 text-gray-600">
-                Enter your LinkedIn profile URL to get started!
+                Enter your LinkedIn profile URL and the name of the company you
+                are applying to below
               </p>
 
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -65,7 +60,7 @@ function App() {
                         id="linkedin"
                         autoComplete="linkedin"
                         className="block flex-1 border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder=""
+                        placeholder="https://www.linkedin.com/in/RichardHendricks"
                         value={linkedin}
                         onChange={(e) => setLinkedin(e.target.value)}
                       />
