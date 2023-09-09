@@ -8,7 +8,9 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const backendURL =
-    import.meta.env.VITE_ENV === "dev" ? "http://localhost:8000" : "TODO";
+    import.meta.env.VITE_ENV === "dev"
+      ? "http://localhost:8000"
+      : "https://hmp-api-w4e4bniyjq-ue.a.run.app";
 
   const submitFunc = async (e) => {
     e.preventDefault();
