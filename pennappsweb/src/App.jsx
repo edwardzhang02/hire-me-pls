@@ -1,11 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import Spinner from "./components/Spinner";
 import imgUrl from "../public/hire-me-pls.png";
-import githubImg from "../public/github-mark.png";
-import metaphorImg from "../public/metaphor.png";
 import Footer from "./components/Footer";
-import Faq from "./components/Faq";
 
 function App() {
   const [linkedin, setLinkedin] = useState("");
@@ -13,7 +9,9 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const backendURL =
-    import.meta.env.VITE_ENV === "dev" ? "http://localhost:8000" : "TODO";
+    import.meta.env.VITE_ENV === "dev"
+      ? "http://localhost:8000"
+      : "https://hmp-api-w4e4bniyjq-ue.a.run.app";
 
   const submitFunc = async (e) => {
     e.preventDefault();
@@ -179,8 +177,8 @@ function App() {
                 >
                   LinkedIn Profile URL
                 </label>
-                <div class="flex">
-                  <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                <div className="flex">
+                  <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
                     <svg
                       className="w-4 h-4 text-gray-500"
                       aria-hidden="true"
@@ -195,7 +193,7 @@ function App() {
                     type="text"
                     id="linkedin"
                     name="linkedin"
-                    class="rounded-none rounded-r-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5 "
+                    className="rounded-none rounded-r-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5 "
                     placeholder="https://linkedin.com/in/Richard-Hendricks"
                     value={linkedin}
                     onChange={(e) => setLinkedin(e.target.value)}
@@ -208,8 +206,8 @@ function App() {
                 >
                   Company
                 </label>
-                <div class="flex">
-                  <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                <div className="flex">
+                  <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -256,7 +254,7 @@ function App() {
                   <div role="status">
                     <svg
                       aria-hidden="true"
-                      class="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300"
+                      className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +268,7 @@ function App() {
                         fill="currentFill"
                       />
                     </svg>
-                    <span class="sr-only">Loading...</span>
+                    <span className="sr-only">Loading...</span>
                   </div>
                 </button>
               )}
