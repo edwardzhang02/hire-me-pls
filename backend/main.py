@@ -1,11 +1,28 @@
 import os
 import openai
 import requests
+import logging
 from fastapi import FastAPI
 from pydantic import BaseModel
 from metaphor_python import Metaphor
 from dotenv import load_dotenv
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
+
+# Imports the Cloud Logging client library
+import google.cloud.logging
+
+if "GCP_PROJECT" in os.environ:
+    # Instantiates a client
+    client = google.cloud.logging.Client()
+
+    # Retrieves a Cloud Logging handler based on the environment
+    # you're running in and integrates the handler with the
+    # Python logging module. By default this captures all logs
+    # at INFO level and higher
+    client.setup_logging()
+else:
+    logging.basicConfig(level=logging.INFO)
+
 
 load_dotenv()
 openai.api_key = os.environ.get("OPEN_AI_API_KEY")
@@ -20,7 +37,7 @@ app = FastAPI()
 client = Metaphor(api_key=os.environ.get("METAPHOR_API_KEY"))
 
 origins = [
-    "http://localhost:5173",  # origin of frontend application
+    "*",  # origin of frontend application
 ]
 
 app.add_middleware(
@@ -92,8 +109,8 @@ def clean_company_information(information, company_name):
         n=1,
         max_tokens=3000,
     )
-    print(completion.usage)
-    print(completion.choices[0].message.content)
+    logging.info(completion.usage)
+    logging.info(completion.choices[0].message.content)
     return {"name": company_name, "info": completion.choices[0].message.content}
 
 
@@ -108,18 +125,20 @@ def generate_cover_letter(company_info, user_info):
         n=1,
         max_tokens=3000,
     )
-    print(completion.usage)
-    print(completion.choices[0].message.content)
+    logging.info(completion.usage)
+    logging.info(completion.choices[0].message.content)
     return completion.choices[0].message.content
 
 
 @app.get("/")
 async def root():
+    logging.info("TESTING123")
     return {"message": "Hello World"}
 
 
-@app.post("/generate/")
+@app.post("/generate")
 async def root(context: Context):
+    logging.info(context)
     user_info = get_user_information(context.linkedin_profile_url)
     company_info = get_company_information(context.company_name)
     clean_info = clean_company_information(company_info, context.company_name)
