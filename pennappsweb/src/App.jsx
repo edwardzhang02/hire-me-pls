@@ -4,30 +4,20 @@ import "./App.css";
 function App() {
   const [linkedin, setLinkedin] = useState("");
   const [company, setCompany] = useState("");
-  const linkedinUrl = "/api/linkedin-email-finder";
   const backendURL =
     import.meta.env.VITE_ENV === "dev" ? "http://localhost:8000" : "TODO";
-  const apiKey = import.meta.env.VITE_PROSPEO_API;
-
-  const requiredHeaders = {
-    "Content-Type": "application/json",
-    "X-KEY": apiKey,
-  };
 
   const submitFunc = async (e) => {
     e.preventDefault();
-    const userRes = await fetch(linkedinUrl, {
-      method: "POST",
-      headers: requiredHeaders,
-      body: JSON.stringify({ url: linkedin, profile_only: true }),
-    });
-    const userData = await userRes.json();
+
     const coverLetterRes = await fetch(`${backendURL}/generate`, {
       method: "POST",
-      headers: requiredHeaders,
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        user_context: JSON.stringify(userData),
         company_name: company,
+        linkedin_profile_url: linkedin,
       }),
     });
     const coverLetterData = await coverLetterRes.json();
