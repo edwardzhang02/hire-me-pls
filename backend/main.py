@@ -115,7 +115,7 @@ def clean_company_information(information, company_name):
 
 
 def generate_cover_letter(company_info, user_info):
-    my_prompt = f"Below is information about the company {company_info['name']} and an application. Please generate a personalized cover letter based on the information you know about the applicant and the company: Company Info:{company_info['info']} User Info: {user_info}"
+    my_prompt = f"Below is information about the company {company_info['name']} formatted between HTML tags which you should ignore. There is also information about a jobseeker looking to apply to roles at this company. Please generate a personalized cover letter based on the information you know about the applicant and the company. The letter should be written in the style an undergraduate university student would write. Do not use every detail of the company info or the user info just keep the relevant parts which are most likely to help the candidate stand out and get hired. Never list any information as true about the candidate that you are not directly given for example only list skills that are explicitly listed in the User Info section. This letter should be no longer than 4 or 5 paragraphs Company Info: {company_info['info']} User Info: {user_info}"
     completion = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
@@ -123,7 +123,7 @@ def generate_cover_letter(company_info, user_info):
             {"role": "user", "content": my_prompt},
         ],
         n=1,
-        max_tokens=3000,
+        max_tokens=4000,
     )
     logging.info(completion.usage)
     logging.info(completion.choices[0].message.content)
@@ -132,7 +132,6 @@ def generate_cover_letter(company_info, user_info):
 
 @app.get("/")
 async def root():
-    logging.info("TESTING123")
     return {"message": "Hello World"}
 
 
@@ -141,6 +140,9 @@ async def root(context: Context):
     logging.info(context)
     user_info = get_user_information(context.linkedin_profile_url)
     company_info = get_company_information(context.company_name)
-    clean_info = clean_company_information(company_info, context.company_name)
-    cover_letter = generate_cover_letter(clean_info, user_info)
+    # clean_info = clean_company_information(company_info, context.company_name) Optional cleaning data setp
+    logging.info("Generating Letter...")
+    cover_letter = generate_cover_letter(
+        {"name": context.company_name, "info": company_info}, user_info
+    )
     return cover_letter
