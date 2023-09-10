@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import imgUrl from "../public/hire-me-pls.png";
 import Footer from "./components/Footer";
@@ -9,8 +9,33 @@ function App() {
   const [linkedin, setLinkedin] = useState("");
   const [company, setCompany] = useState("");
   const [loading, setLoading] = useState(true);
-  const [clickedGenerate, setClickedGenerate] = useState(false);
-  const [responseMessage, setResponseMessage] = useState("");
+  const [clickedGenerate, setClickedGenerate] = useState(true);
+  const [clipboardStatus, setClipboardStatus] = useState(false);
+  const [responseMessage, setResponseMessage] =
+    useState(`Proficient coder in multiple coding languages (Java, C++, Python)
+Experience with Windows OS and Microsoft 365 Suite
+Strong command over cybersecurity protocols and implementations
+Hands-on experience in system deployment methods
+In-depth understanding of secure cloud technologies and IoT systems
+Excellent problem-solving skills and a detail-oriented approach
+
+Dear Hiring Manager,
+
+I am truly excited to apply for the available position in your renowned organization, Microsoft. In today's digital-first business landscape where seamless software integration and staunch cybersecurity are essential, I believe my proficiencies align perfectly with your needs. 
+
+I have proficiency in Java, C++, and Python, and also possess experience with the Microsoft 365 suite, which I am confident will allow me to contribute significantly to your team. My hands-on experience with system deployment methods, including Windows Autopilot and Intune, along with Microsoft Configuration Manager, dovetails with Microsoft's commitment to efficient, state-of-the-art deployment systems.
+
+My in-depth understanding of cybersecurity and its vast umbrella from on-premise security to IoT system safety will enable me to contribute in a significant way to the Microsoft Cybersecurity Reference Architectures (MCRA). Implementing Zero Trust and contributing to rapid modernization plans is a domain I am eager to positively impact and improve within your organization. 
+
+Additionally, my prior exposure to cloud and IoT technologies amalgamates well with the solutions you propose via Microsoft 365 and MCRA. My detail-oriented approach, coupled with excellent problem-solving skills, will surely enhance Microsoft's commitment to providing robust security and a seamless user experience. 
+
+Lastly, I truly appreciate Microsoft's intent on maintaining open-ended communication with clients and potential users with offering free trial accounts. This act of looking beyond the immediate business and creating room for potential long-term relationships is a trait I personally resonate with. I aim to share this customer-centric way of thinking and help Microsoft flourish in its journey to drive digital transformation for organizations globally.
+
+Thank you for considering my application. I am looking forward to potentially discussing my candidacy further and am ready to provide any further information required.
+
+Best Regards,
+
+[Your Name]`);
 
   const backendURL =
     import.meta.env.VITE_ENV === "dev"
@@ -37,6 +62,20 @@ function App() {
     setResponseMessage(coverLetterData);
   };
 
+  useEffect(() => {
+    let timer;
+
+    if (clipboardStatus) {
+      timer = setTimeout(() => {
+        setClipboardStatus(false);
+      }, 3500);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [clipboardStatus]);
   return (
     <div>
       <div className="max-w-4xl mx-auto">
@@ -222,10 +261,64 @@ function App() {
             <div className="border border-gray-200 bg-gray-100 p-4 rounded-lg mx-auto max-w-7xl px-6 lg:mx-8 mt-32">
               {responseMessage && loading ? (
                 <>
-                  <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-                    Your Cover Letter
-                  </h2>
-                  <pre className="mt-2">{responseMessage}</pre>
+                  <div className="flex justify-between mt-1">
+                    <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+                      Your Cover Letter
+                    </h2>
+                    {clipboardStatus ? (
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={() => {
+                          setClipboardStatus(true);
+                          navigator.clipboard.writeText(responseMessage);
+                        }}
+                      >
+                        Copied to Clipboard!
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        onClick={() => {
+                          setClipboardStatus(true);
+                          navigator.clipboard.writeText(responseMessage);
+                        }}
+                      >
+                        Copy to Clipboard
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+
+                  <pre className="mt-6">{responseMessage}</pre>
                 </>
               ) : (
                 <>
