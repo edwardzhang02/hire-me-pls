@@ -3,11 +3,13 @@ import "./App.css";
 import imgUrl from "../public/hire-me-pls.png";
 import Footer from "./components/Footer";
 import Faq from "./components/Faq";
+import Spinner from "./components/Spinner";
 
 function App() {
   const [linkedin, setLinkedin] = useState("");
   const [company, setCompany] = useState("");
   const [loading, setLoading] = useState(true);
+  const [clickedGenerate, setClickedGenerate] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
 
   const backendURL =
@@ -17,6 +19,7 @@ function App() {
 
   const submitFunc = async (e) => {
     e.preventDefault();
+    setClickedGenerate(true);
     setLoading(false);
     const coverLetterRes = await fetch(`${backendURL}/generate`, {
       method: "POST",
@@ -189,12 +192,12 @@ function App() {
               ) : (
                 <button
                   type="submit"
-                  className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="rounded-md bg-indigo-400 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   <div role="status">
                     <svg
                       aria-hidden="true"
-                      className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300"
+                      className="inline w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -215,14 +218,21 @@ function App() {
             </div>
           </form>
 
-          {responseMessage ? (
+          {clickedGenerate && (
             <div className="border border-gray-200 bg-gray-100 p-4 rounded-lg mx-auto max-w-7xl px-6 lg:mx-8 mt-32">
-              <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-                Your Cover Letter
-              </h2>
+              {responseMessage && loading ? (
+                <>
+                  <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+                    Your Cover Letter
+                  </h2>
+                  <pre className="mt-2">{responseMessage}</pre>
+                </>
+              ) : (
+                <>
+                  <Spinner />
+                </>
+              )}
             </div>
-          ) : (
-            <></>
           )}
 
           <div className="bg-white py-24 sm:py-32" id="learn-more">
