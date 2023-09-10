@@ -11,31 +11,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [clickedGenerate, setClickedGenerate] = useState(true);
   const [clipboardStatus, setClipboardStatus] = useState(false);
-  const [responseMessage, setResponseMessage] =
-    useState(`Proficient coder in multiple coding languages (Java, C++, Python)
-Experience with Windows OS and Microsoft 365 Suite
-Strong command over cybersecurity protocols and implementations
-Hands-on experience in system deployment methods
-In-depth understanding of secure cloud technologies and IoT systems
-Excellent problem-solving skills and a detail-oriented approach
-
-Dear Hiring Manager,
-
-I am truly excited to apply for the available position in your renowned organization, Microsoft. In today's digital-first business landscape where seamless software integration and staunch cybersecurity are essential, I believe my proficiencies align perfectly with your needs. 
-
-I have proficiency in Java, C++, and Python, and also possess experience with the Microsoft 365 suite, which I am confident will allow me to contribute significantly to your team. My hands-on experience with system deployment methods, including Windows Autopilot and Intune, along with Microsoft Configuration Manager, dovetails with Microsoft's commitment to efficient, state-of-the-art deployment systems.
-
-My in-depth understanding of cybersecurity and its vast umbrella from on-premise security to IoT system safety will enable me to contribute in a significant way to the Microsoft Cybersecurity Reference Architectures (MCRA). Implementing Zero Trust and contributing to rapid modernization plans is a domain I am eager to positively impact and improve within your organization. 
-
-Additionally, my prior exposure to cloud and IoT technologies amalgamates well with the solutions you propose via Microsoft 365 and MCRA. My detail-oriented approach, coupled with excellent problem-solving skills, will surely enhance Microsoft's commitment to providing robust security and a seamless user experience. 
-
-Lastly, I truly appreciate Microsoft's intent on maintaining open-ended communication with clients and potential users with offering free trial accounts. This act of looking beyond the immediate business and creating room for potential long-term relationships is a trait I personally resonate with. I aim to share this customer-centric way of thinking and help Microsoft flourish in its journey to drive digital transformation for organizations globally.
-
-Thank you for considering my application. I am looking forward to potentially discussing my candidacy further and am ready to provide any further information required.
-
-Best Regards,
-
-[Your Name]`);
+  const [responseMessage, setResponseMessage] = useState("");
 
   const backendURL =
     import.meta.env.VITE_ENV === "dev"
