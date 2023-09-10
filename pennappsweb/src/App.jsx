@@ -23,7 +23,7 @@ function App() {
   const submitFunc = async (e) => {
     e.preventDefault();
     setClickedGenerate(true);
-    setResponseMessage(" ");
+    setResponseMessage("");
     setLoading(false);
     try {
       const response = await fetch(`${backendURL}/generate`, {
