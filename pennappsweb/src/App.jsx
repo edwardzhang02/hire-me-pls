@@ -53,27 +53,27 @@ function App() {
         }
 
         let decoded_val = new TextDecoder().decode(value);
-        const lines = decoded_val.split("\n");
+        // const lines = decoded_val.split("\n");
 
-        const clean_val = lines.reduce((result, line) => {
-          if (line.startsWith("data: ")) {
-            result += line.substring("data: ".length);
-          } else {
-            result += line;
-          }
-          // eslint-disable-next-line no-useless-escape
-          const endsWithCommaOrPeriod = /[,\.]$/.test(result);
-          if (endsWithCommaOrPeriod) {
-            result += " ";
-          }
-          return result;
-        }, "");
-        // eslint-disable-next-line no-useless-escape
-        const stringWithSpaces = clean_val.replace(/[,\.]/g, function (match) {
-          return match + " ";
-        });
-        console.log(stringWithSpaces);
-        setResponseMessage((prev) => prev + stringWithSpaces);
+        // const clean_val = lines.reduce((result, line) => {
+        //   if (line.startsWith("data: ")) {
+        //     result += line.substring("data: ".length);
+        //   } else {
+        //     result += line;
+        //   }
+        //   // eslint-disable-next-line no-useless-escape
+        //   const endsWithCommaOrPeriod = /[,\.]$/.test(result);
+        //   if (endsWithCommaOrPeriod) {
+        //     result += " ";
+        //   }
+        //   return result;
+        // }, "");
+        // // eslint-disable-next-line no-useless-escape
+        // const stringWithSpaces = clean_val.replace(/[,\.]/g, function (match) {
+        //   return match + " ";
+        // });
+        // console.log(stringWithSpaces);
+        setResponseMessage((prev) => prev + decoded_val);
       }
 
       reader.releaseLock();

@@ -130,7 +130,7 @@ def generate_cover_letter(company_info, user_info):
     for event in completion_stream:
         if "content" in event["choices"][0].delta:
             current_response = event["choices"][0].delta.content
-            yield "data: " + current_response + "\n\n"
+            yield current_response
 
 
 @app.get("/")
