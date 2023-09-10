@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "./App.css";
-import imgUrl from "../public/hire-me-pls.png";
+import imgUrl from "../public/logo.png";
 import Footer from "./components/Footer";
 import Faq from "./components/Faq";
 
 function App() {
   const [linkedin, setLinkedin] = useState("");
   const [company, setCompany] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
 
   const backendURL =
@@ -17,21 +17,35 @@ function App() {
 
   const submitFunc = async (e) => {
     e.preventDefault();
-    setLoading(false);
-    const coverLetterRes = await fetch(`${backendURL}/generate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        company_name: company,
-        linkedin_profile_url: linkedin,
-      }),
-    });
-    const coverLetterData = await coverLetterRes.json();
     setLoading(true);
-    console.log(coverLetterData);
-    setResponseMessage(coverLetterData);
+    try {
+      const coverLetterRes = await fetch(`${backendURL}/generate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          company_name: company,
+          linkedin_profile_url: linkedin,
+        }),
+      });
+
+      if (!coverLetterRes.ok) {
+        // Handle non-successful HTTP status codes
+        throw new Error(`HTTP error! Status: ${coverLetterRes.status}`);
+      }
+
+      const coverLetterData = await coverLetterRes.json();
+      setLoading(false);
+      setResponseMessage(coverLetterData);
+    } catch (error) {
+      // Handle and log the error message
+      console.error("Fetch error:", error.message);
+
+      // Handle the error or take appropriate actions here
+      setResponseMessage("Something went wrong");
+      setLoading(false);
+    }
   };
 
   return (
@@ -44,9 +58,12 @@ function App() {
               aria-label="Global"
             >
               <div className="flex lg:flex-1">
-                <a href="" className="-m-1.5 p-1.5">
+                <a href="" className="-m-1.5 p-1.5 flex flex-col items-center">
+                  <h1 className="text-lg font-bold tracking-tight text-gray-900 sm:text-xl">
+                    hire-me-pls
+                  </h1>
                   <span className="sr-only">Your Company</span>
-                  <img className="h-16 w-auto" src={imgUrl} alt="" />
+                  <img className="h-auto w-16" src={imgUrl} alt="" />
                 </a>
               </div>
             </nav>
@@ -68,11 +85,10 @@ function App() {
             <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
               <div className="text-center">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                  Generate a custom cover letter in seconds!
+                  Personalized cover letters in seconds
                 </h1>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                  Enter your LinkedIn profile URL and the name of the company
-                  you are applying to below
+                  Give us your LinkedIn profile and we&apos;ll handle the rest
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                   <a
@@ -178,7 +194,7 @@ function App() {
             </div>
 
             <div className="mt-2 flex items-center justify-end gap-x-6">
-              {loading ? (
+              {!loading ? (
                 <button
                   type="submit"
                   className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -218,8 +234,9 @@ function App() {
           {responseMessage ? (
             <div className="border border-gray-200 bg-gray-100 p-4 rounded-lg mx-auto max-w-7xl px-6 lg:mx-8 mt-32">
               <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-                Your Cover Letter
+                Your Personalized Cover Letter
               </h2>
+              <p>{responseMessage}</p>
             </div>
           ) : (
             <></>
@@ -227,7 +244,7 @@ function App() {
 
           <div className="bg-white py-24 sm:py-32" id="learn-more">
             <h2 className="text-center text-3xl font-semibold text-lg leading-8 text-gray-900 mb-4">
-              Built with the technologies of the future
+              Powered by cutting edge technologies
             </h2>
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div className="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
