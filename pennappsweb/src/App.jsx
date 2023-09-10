@@ -17,9 +17,10 @@ function App() {
 
   const submitFunc = async (e) => {
     e.preventDefault();
+    setResponseMessage(" ");
     setLoading(true);
     try {
-      const coverLetterRes = await fetch(`${backendURL}/generate`, {
+      const response = await fetch(`${backendURL}/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,14 +31,45 @@ function App() {
         }),
       });
 
-      if (!coverLetterRes.ok) {
-        // Handle non-successful HTTP status codes
-        throw new Error(`HTTP error! Status: ${coverLetterRes.status}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
 
-      const coverLetterData = await coverLetterRes.json();
+      const reader = response.body.getReader();
+
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          break;
+        }
+
+        let decoded_val = new TextDecoder().decode(value);
+        const lines = decoded_val.split("\n");
+
+        const clean_val = lines.reduce((result, line) => {
+          if (line.startsWith("data: ")) {
+            result += line.substring("data: ".length);
+          } else {
+            result += line;
+          }
+          // eslint-disable-next-line no-useless-escape
+          const endsWithCommaOrPeriod = /[,\.]$/.test(result);
+          if (endsWithCommaOrPeriod) {
+            result += " ";
+          }
+          return result;
+        }, "");
+        // eslint-disable-next-line no-useless-escape
+        const stringWithSpaces = clean_val.replace(/[,\.]/g, function (match) {
+          return match + " ";
+        });
+        setResponseMessage((prev) => prev + stringWithSpaces);
+      }
+
+      reader.releaseLock();
       setLoading(false);
-      setResponseMessage(coverLetterData);
     } catch (error) {
       // Handle and log the error message
       console.error("Fetch error:", error.message);
