@@ -34,7 +34,7 @@ const faqs = [
   },
 ];
 
-export default function Example() {
+export default function Faq() {
   return (
     <div className="border border-gray-200 bg-gray-100 mx-auto max-w-7xl px-6 lg:mx-8 rounded-lg">
       <div className="mx-auto max-w-7xl px-6 pt-6 sm:pb-16 lg:px-8">

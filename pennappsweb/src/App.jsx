@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import imgUrl from "../public/hire-me-pls.png";
 import Footer from "./components/Footer";
+import Faq from "./components/Faq";
 
 function App() {
   const [linkedin, setLinkedin] = useState("");
