@@ -7,6 +7,7 @@ function App() {
   const [linkedin, setLinkedin] = useState("");
   const [company, setCompany] = useState("");
   const [loading, setLoading] = useState(true);
+  const [responseMessage, setResponseMessage] = useState("");
 
   const backendURL =
     import.meta.env.VITE_ENV === "dev"
@@ -15,7 +16,7 @@ function App() {
 
   const submitFunc = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setLoading(false);
     const coverLetterRes = await fetch(`${backendURL}/generate`, {
       method: "POST",
       headers: {
@@ -27,8 +28,9 @@ function App() {
       }),
     });
     const coverLetterData = await coverLetterRes.json();
-    setLoading(false);
+    setLoading(true);
     console.log(coverLetterData);
+    setResponseMessage(coverLetterData);
   };
 
   return (
@@ -41,7 +43,7 @@ function App() {
               aria-label="Global"
             >
               <div className="flex lg:flex-1">
-                <a href="#" className="-m-1.5 p-1.5">
+                <a href="" className="-m-1.5 p-1.5">
                   <span className="sr-only">Your Company</span>
                   <img className="h-16 w-auto" src={imgUrl} alt="" />
                 </a>
@@ -79,7 +81,7 @@ function App() {
                     Get started
                   </a>
                   <a
-                    href="#"
+                    href="#learn-more"
                     className="text-sm font-semibold leading-6 text-gray-900"
                   >
                     Learn more <span aria-hidden="true">→</span>
@@ -101,73 +103,10 @@ function App() {
             </div>
           </div>
 
-          <div className="bg-white py-24 sm:py-32">
-            <h2 className="text-center text-3xl font-semibold text-lg leading-8 text-gray-900 mb-4">
-              Built with the technologies of the future
-            </h2>
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <div className="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
-                <div className="bg-gray-100 p-8 sm:p-10">
-                  <img
-                    className="max-h-12 w-full object-contain"
-                    src="https://i0.wp.com/www.globalemancipation.ngo/wp-content/uploads/2017/09/github-logo.png?ssl=1"
-                    alt="GitHub"
-                    width={158}
-                    height={48}
-                  />
-                </div>
-                <div className="bg-gray-100 p-6 sm:p-10">
-                  <p
-                    className="w-full mx-auto my-auto text-center text-3xl text-[#9169FF]"
-                    style={{ fontFamily: "IBM Plex Mono" }}
-                  >
-                    Metaphor
-                  </p>
-                </div>
-                <div className="bg-gray-100  p-6 sm:p-10">
-                  <img
-                    className="max-h-12 w-full object-contain"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1200px-ChatGPT_logo.svg.png"
-                    alt="Tuple"
-                    width={158}
-                    height={48}
-                  />
-                </div>
-                <div className="bg-gray-100  p-6 sm:p-10">
-                  <img
-                    className="max-h-12 w-full object-contain"
-                    src="https://www.gend.co/hs-fs/hubfs/gcp-logo-cloud.png?width=730&name=gcp-logo-cloud.png"
-                    alt="GCP"
-                    width={158}
-                    height={48}
-                  />
-                </div>
-                <div className="bg-gray-100  p-6 sm:p-10">
-                  <img
-                    className="max-h-12 w-full object-contain"
-                    src="https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
-                    alt="FastAPI"
-                    width={158}
-                    height={48}
-                  />
-                </div>
-                <div className="bg-gray-100 p-6 sm:p-10">
-                  <img
-                    className="max-h-12 w-full object-contain"
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/2300px-React-icon.svg.png"
-                    alt="React"
-                    width={158}
-                    height={48}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
           <form
             onSubmit={(e) => submitFunc(e)}
             id="submit"
-            className="border border-gray-200 bg-gray-100 p-4 rounded-lg mb-8"
+            className="border border-gray-200 bg-gray-100 p-4 rounded-lg mx-auto max-w-7xl px-6 lg:mx-8 mt-32"
           >
             <div className="space-y-12">
               <div className="border-gray-900/10 pb-12 mt-4">
@@ -274,6 +213,81 @@ function App() {
               )}
             </div>
           </form>
+
+          {responseMessage ? (
+            <div className="border border-gray-200 bg-gray-100 p-4 rounded-lg mx-auto max-w-7xl px-6 lg:mx-8 mt-32">
+              <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+                Your Cover Letter
+              </h2>
+            </div>
+          ) : (
+            <></>
+          )}
+
+          <div className="bg-white py-24 sm:py-32" id="learn-more">
+            <h2 className="text-center text-3xl font-semibold text-lg leading-8 text-gray-900 mb-4">
+              Built with the technologies of the future
+            </h2>
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
+                <div className="bg-gray-100 p-8 sm:p-10 border border-gray-200">
+                  <img
+                    className="max-h-12 w-full object-contain"
+                    src="https://i0.wp.com/www.globalemancipation.ngo/wp-content/uploads/2017/09/github-logo.png?ssl=1"
+                    alt="GitHub"
+                    width={158}
+                    height={48}
+                  />
+                </div>
+                <div className="bg-gray-100 p-6 sm:p-10">
+                  <p
+                    className="w-full mx-auto my-auto text-center text-3xl text-[#9169FF]"
+                    style={{ fontFamily: "IBM Plex Mono" }}
+                  >
+                    Metaphor
+                  </p>
+                </div>
+                <div className="bg-gray-100  p-6 sm:p-10 border border-gray-200">
+                  <img
+                    className="max-h-12 w-full object-contain"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1200px-ChatGPT_logo.svg.png"
+                    alt="Tuple"
+                    width={158}
+                    height={48}
+                  />
+                </div>
+                <div className="bg-gray-100  p-6 sm:p-10 border border-gray-200">
+                  <img
+                    className="max-h-12 w-full object-contain"
+                    src="https://www.gend.co/hs-fs/hubfs/gcp-logo-cloud.png?width=730&name=gcp-logo-cloud.png"
+                    alt="GCP"
+                    width={158}
+                    height={48}
+                  />
+                </div>
+                <div className="bg-gray-100  p-6 sm:p-10 border border-gray-200">
+                  <img
+                    className="max-h-12 w-full object-contain"
+                    src="https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png"
+                    alt="FastAPI"
+                    width={158}
+                    height={48}
+                  />
+                </div>
+                <div className="bg-gray-100 p-6 sm:p-10 border border-gray-200">
+                  <img
+                    className="max-h-12 w-full object-contain"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/2300px-React-icon.svg.png"
+                    alt="React"
+                    width={158}
+                    height={48}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Faq />
         </div>
       </div>
       <Footer />
