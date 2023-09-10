@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import Footer from "./components/Footer";
 import Faq from "./components/Faq";
-import Spinner from "./components/Spinner";
 import Hero from "./components/Hero";
 import InputForm from "./components/InputForm";
 import Response from "./components/Response";
@@ -24,21 +23,68 @@ function App() {
   const submitFunc = async (e) => {
     e.preventDefault();
     setClickedGenerate(true);
+    setResponseMessage(" ");
     setLoading(false);
-    const coverLetterRes = await fetch(`${backendURL}/generate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        company_name: company,
-        linkedin_profile_url: linkedin,
-      }),
-    });
-    const coverLetterData = await coverLetterRes.json();
-    setLoading(true);
-    console.log(coverLetterData);
-    setResponseMessage(coverLetterData);
+    try {
+      const response = await fetch(`${backendURL}/generate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          company_name: company,
+          linkedin_profile_url: linkedin,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const reader = response.body.getReader();
+      setLoading(true);
+
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          break;
+        }
+
+        let decoded_val = new TextDecoder().decode(value);
+        const lines = decoded_val.split("\n");
+
+        const clean_val = lines.reduce((result, line) => {
+          if (line.startsWith("data: ")) {
+            result += line.substring("data: ".length);
+          } else {
+            result += line;
+          }
+          // eslint-disable-next-line no-useless-escape
+          const endsWithCommaOrPeriod = /[,\.]$/.test(result);
+          if (endsWithCommaOrPeriod) {
+            result += " ";
+          }
+          return result;
+        }, "");
+        // eslint-disable-next-line no-useless-escape
+        const stringWithSpaces = clean_val.replace(/[,\.]/g, function (match) {
+          return match + " ";
+        });
+        console.log(stringWithSpaces);
+        setResponseMessage((prev) => prev + stringWithSpaces);
+      }
+
+      reader.releaseLock();
+    } catch (error) {
+      // Handle and log the error message
+      console.error("Fetch error:", error.message);
+
+      // Handle the error or take appropriate actions here
+      setResponseMessage("Something went wrong");
+      setLoading(true);
+    }
   };
 
   useEffect(() => {

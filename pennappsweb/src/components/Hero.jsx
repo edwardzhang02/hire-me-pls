@@ -1,4 +1,4 @@
-import imgUrl from "../../public/hire-me-pls.png";
+import imgUrl from "../../public/logo.png";
 
 export default function Hero() {
   return (
@@ -9,9 +9,12 @@ export default function Hero() {
           aria-label="Global"
         >
           <div className="flex lg:flex-1">
-            <a href="" className="-m-1.5 p-1.5">
+            <a href="" className="-m-1.5 p-1.5 flex flex-col items-center">
+              <h1 className="text-lg font-bold tracking-tight text-gray-900 sm:text-xl">
+                hire-me-pls
+              </h1>
               <span className="sr-only">Your Company</span>
-              <img className="h-16 w-auto" src={imgUrl} alt="" />
+              <img className="h-auto w-16" src={imgUrl} alt="" />
             </a>
           </div>
         </nav>
