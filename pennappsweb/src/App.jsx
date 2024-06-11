@@ -17,7 +17,7 @@ function App() {
 
   const backendURL =
     import.meta.env.VITE_ENV === "dev"
-      ? "http://localhost:8000"
+      ? "http://localhost:5173"
       : "https://hmp-api-w4e4bniyjq-ue.a.run.app";
 
   const submitFunc = async (e) => {
@@ -27,15 +27,18 @@ function App() {
     setLoading(false);
     try {
       const response = await fetch(`${backendURL}/generate`, {
+        mode:'no-cors',
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "origin": window.location.origin 
         },
         body: JSON.stringify({
           company_name: company,
           linkedin_profile_url: linkedin,
         }),
       });
+      console.log("done");
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -102,7 +105,6 @@ function App() {
             setClipboardStatus={setClipboardStatus}
           />
           <Logos />
-          <Faq />
         </div>
       </div>
       <Footer />

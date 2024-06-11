@@ -2,7 +2,7 @@ export default function Logos() {
   return (
     <div className="bg-white py-24 sm:py-32" id="learn-more">
       <h2 className="text-center text-3xl font-semibold text-lg leading-8 text-gray-900 mb-4">
-        Built with the technologies of the future
+        Built with:
       </h2>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">

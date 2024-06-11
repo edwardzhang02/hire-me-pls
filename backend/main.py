@@ -7,7 +7,8 @@ from starlette.responses import StreamingResponse
 from pydantic import BaseModel
 from metaphor_python import Metaphor
 from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
+# from starlette.middleware.cors import CORSMiddleware
+from fastapi_cors import CORSMiddleware
 
 # Imports the Cloud Logging client library
 import google.cloud.logging
@@ -146,9 +147,11 @@ async def root(context: Context):
     # clean_info = clean_company_information(company_info, context.company_name) Optional cleaning data setp
     logging.info("Generating...")
 
-    return StreamingResponse(
-        generate_cover_letter(
-            {"name": context.company_name, "info": company_info}, user_info
-        ),
-        media_type="text/event-stream",
+    response = StreamingResponse(
+        generate_cover_letter({"name": context.company_name, "info": company_info}, user_info),
+        media_type="text/event-stream"
     )
+    response.headers["Access-Control-Allow-Origin"] = "http://localhost:5173"
+    response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
